@@ -1,0 +1,16 @@
+{
+  "name": "build-a-bundler-root",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "pnpm --filter build-a-bundler start",
+    "build-bundler": "pnpm --filter build-a-bundler build",
+    "build-fixture": "pnpm --filter build-a-bundler-fixtures build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}

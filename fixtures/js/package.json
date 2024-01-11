@@ -1,0 +1,16 @@
+{
+  "name": "build-a-bundler-fixtures",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "bab build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "build-a-bundler": "workspace:*"
+  }
+}
