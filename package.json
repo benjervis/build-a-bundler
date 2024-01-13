@@ -7,10 +7,15 @@
   "scripts": {
     "start": "pnpm --filter build-a-bundler start",
     "build-bundler": "pnpm --filter build-a-bundler build",
-    "build-fixture": "pnpm --filter build-a-bundler-fixtures build"
+    "build-fixture": "turbo --filter=*-fixtures build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "devDependencies": {
+    "@types/node": "^20.11.0"
+  },
+  "dependencies": {
+    "turbo": "^1.11.3"
+  }
 }

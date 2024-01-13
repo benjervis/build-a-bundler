@@ -9,15 +9,17 @@
   },
   "scripts": {
     "start": "bun run src/index.ts",
-    "build": "esbuild src/index.ts --outdir=dist"
+    "build": "esbuild src/index.ts --outdir=dist --bundle --platform=node --target=node18 --packages=external --format=esm"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "parse-imports": "^1.1.2",
+    "sucrase": "^3.35.0"
+  },
   "devDependencies": {
-    "@types/bun": "^1.0.1",
     "bun": "^1.0.22",
-    "esbuild": "^0.19.11",
-    "parse-imports": "^1.1.2"
+    "esbuild": "^0.19.11"
   }
 }
