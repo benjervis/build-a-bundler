@@ -1,4 +1,3 @@
-import { concat } from "./utils.js";
 import { COUNTRY, NAME } from "./constants.js";
 
 export function myFunction() {
@@ -12,6 +11,7 @@ export function secondaryFunction() {
   };
 }
 
-export function anotherFunction() {
+export async function anotherFunction() {
+  const { concat } = await import("./utils.js");
   return concat(NAME, COUNTRY);
 }
