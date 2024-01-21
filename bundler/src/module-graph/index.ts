@@ -1,21 +1,29 @@
 import fs from "fs/promises";
 import parseImports from "parse-imports";
 
+type ModuleID = string;
+
 interface Module {
-  id: string;
+  id: ModuleID;
   isEntry: boolean;
   code: string;
-  dependencies: string[];
-  dependents: string[];
+  dependencies: ModuleID[];
+  dependents: ModuleID[];
 }
 
 type ImportItem = [string, string | null];
 
 export class ModuleGraph {
-  private graph: Map<string, Module>;
+  private graph: Map<ModuleID, Module>;
+  private readonly _entryPoints: Set<ModuleID>;
 
   constructor() {
     this.graph = new Map();
+    this._entryPoints = new Set();
+  }
+
+  public get entryPoints() {
+    return this._entryPoints;
   }
 
   getModule(id: string) {
@@ -41,6 +49,10 @@ export class ModuleGraph {
     const dependencies: string[] = [];
     const imports: [string, string][] = [];
 
+    if (isEntry) {
+      this._entryPoints.add(id);
+    }
+
     const rawCode = await fs.readFile(id, "utf-8");
     const moduleImports = await parseImports(rawCode, { resolveFrom: id });
 
@@ -51,6 +63,10 @@ export class ModuleGraph {
         throw new Error(
           `Failed to resolve module ${dep.moduleSpecifier.value}`
         );
+      }
+
+      if (dep.isDynamicImport) {
+        this.entryPoints.add(depId);
       }
 
       dependencies.push(depId);
