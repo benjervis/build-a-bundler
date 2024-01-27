@@ -1,3 +1,4 @@
 packages:
   - fixtures/*
   - bundler
+  - babel-plugins/*

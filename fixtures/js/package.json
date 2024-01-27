@@ -1,6 +1,7 @@
 {
-  "name": "build-a-bundler-fixtures",
+  "name": "@build-a-bundler/fixtures",
   "version": "0.0.1",
+  "private": true,
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -11,6 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "build-a-bundler": "workspace:*"
+    "@build-a-bundler/core": "workspace:*"
   }
 }

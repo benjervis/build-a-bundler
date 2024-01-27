@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "pnpm --filter build-a-bundler start",
-    "build-bundler": "pnpm --filter build-a-bundler build",
-    "build-fixture": "turbo --filter=*-fixtures build"
+    "start": "pnpm --filter=\"core\" start",
+    "build-bundler": "pnpm --filter=\"core\" build",
+    "build-fixture": "turbo --filter=*-fixtures build",
+    "test": "turbo test"
   },
   "keywords": [],
   "author": "",

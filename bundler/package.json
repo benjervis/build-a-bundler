@@ -1,7 +1,7 @@
 {
-  "name": "build-a-bundler",
+  "name": "@build-a-bundler/core",
   "version": "0.0.1",
-  "description": "",
+  "description": "A toy bundler, just to see how they're built.",
   "main": "index.js",
   "type": "module",
   "bin": {
