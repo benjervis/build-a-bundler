@@ -26,6 +26,25 @@ export class ModuleGraph {
     return this._entryPoints;
   }
 
+  getDependenciesFor(id: ModuleId): Module[] {
+    const module = this.graph.get(id);
+
+    if (!module) {
+      throw new Error(`Module ${id} does not exist`);
+    }
+
+    const modules: Module[] = [];
+
+    for (const dependencyId of module.dependencies) {
+      const dependency = this.getModule(dependencyId);
+      if (dependency) {
+        modules.push(dependency);
+      }
+    }
+
+    return modules;
+  }
+
   getModule(id: string) {
     return this.graph.get(id);
   }
