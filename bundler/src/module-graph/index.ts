@@ -1,21 +1,21 @@
 import fs from "fs/promises";
 import parseImports from "parse-imports";
 
-type ModuleID = string;
+export type ModuleId = string;
 
 interface Module {
-  id: ModuleID;
+  id: ModuleId;
   isEntry: boolean;
   code: string;
-  dependencies: ModuleID[];
-  dependents: ModuleID[];
+  dependencies: ModuleId[];
+  dependents: ModuleId[];
 }
 
 type ImportItem = [string, string | null];
 
 export class ModuleGraph {
-  private graph: Map<ModuleID, Module>;
-  private readonly _entryPoints: Set<ModuleID>;
+  private graph: Map<ModuleId, Module>;
+  private readonly _entryPoints: Set<ModuleId>;
 
   constructor() {
     this.graph = new Map();
