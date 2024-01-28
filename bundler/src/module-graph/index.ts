@@ -1,4 +1,4 @@
-import fs from "fs/promises";
+import nodeFs from "fs/promises";
 import parseImports from "parse-imports";
 import path from "node:path";
 
@@ -23,8 +23,9 @@ type ImportItem = [string, string | null];
 export class ModuleGraph {
   private graph: Map<ModuleId, Module>;
   private readonly _entryPoints: Set<ModuleId>;
+  private fs: typeof nodeFs;
 
-  constructor() {
+  constructor(fs = nodeFs) {
     this.graph = new Map();
     this._entryPoints = new Set();
   }
@@ -87,7 +88,7 @@ export class ModuleGraph {
       this._entryPoints.add(relativeId);
     }
 
-    const rawCode = await fs.readFile(relativeId, "utf-8");
+    const rawCode = await this.fs.readFile(relativeId, "utf-8");
     const moduleImports = await parseImports(rawCode, { resolveFrom: id });
 
     for (const dep of moduleImports) {
