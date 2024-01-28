@@ -5,6 +5,10 @@
       "outputs": ["dist/**"],
       "dependsOn": ["^build"]
     },
+    "build-fixture": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["^build-bundler"]
+    },
     "start": {
       "dependsOn": ["^build"]
     },

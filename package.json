@@ -7,7 +7,7 @@
   "scripts": {
     "start": "pnpm --filter=\"core\" start",
     "build-bundler": "pnpm --filter=\"core\" build",
-    "build-fixture": "turbo --filter=*-fixtures build",
+    "build-fixture": "turbo --filter=\"fixtures\" build",
     "test": "turbo test"
   },
   "keywords": [],
