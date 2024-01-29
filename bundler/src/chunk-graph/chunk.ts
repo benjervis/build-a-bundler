@@ -30,6 +30,18 @@ export class Chunk {
     this._externals = externals;
   }
 
+  public get id() {
+    return this._id;
+  }
+
+  public get internals() {
+    return this._internals;
+  }
+
+  public get externals() {
+    return this._externals;
+  }
+
   public static isChunkId(str: string) {
     return str.indexOf(chunkPrefix) === 0;
   }
@@ -42,10 +54,6 @@ export class Chunk {
       .slice(0, 6);
 
     return `${chunkPrefix}${chunkHash}`;
-  }
-
-  public get id() {
-    return this._id;
   }
 
   public addInternalsAndExternals({
