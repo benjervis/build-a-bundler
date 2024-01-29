@@ -1,4 +1,4 @@
-import type * as Babel from "@babel/core";
+import type * as Babel from '@babel/core';
 
 interface PluginState {
   opts: { path: string; code: string };

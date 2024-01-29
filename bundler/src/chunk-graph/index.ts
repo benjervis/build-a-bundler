@@ -1,96 +1,5 @@
-import { Module, ModuleGraph, ModuleId } from "../module-graph";
-import crypto from "node:crypto";
-
-type ChunkId = string;
-
-const chunkPrefix = "chunk_";
-
-type SetType<T> = T extends Set<infer U> ? U : never;
-
-export class Chunk {
-  private _id: ChunkId;
-  private _internals: Set<Module>;
-  private _externals: Set<string>;
-
-  constructor(module: Module);
-  constructor(id: ChunkId, internals: Set<Module>, externals: Set<string>);
-  constructor(...args: [Module] | [ChunkId, Set<Module>, Set<string>]) {
-    if (args.length === 1) {
-      const [module] = args;
-      this._id = Chunk.createId(module.id);
-      this._internals = new Set([module]);
-      this._externals = new Set();
-      return;
-    }
-
-    const [id, internals, externals] = args;
-    this._id = id;
-    this._internals = internals;
-    this._externals = externals;
-  }
-
-  public static isChunkId(str: string) {
-    return str.indexOf(chunkPrefix) === 0;
-  }
-
-  public static createId(str: string) {
-    const chunkHash = crypto
-      .createHash("sha256")
-      .update(str)
-      .digest("hex")
-      .slice(0, 6);
-
-    return `${chunkPrefix}${chunkHash}`;
-  }
-
-  public get id() {
-    return this._id;
-  }
-
-  public addInternalsAndExternals({
-    internals,
-    externals,
-  }: {
-    internals?: Module[];
-    externals?: string[];
-  }) {
-    for (const int of internals ?? []) {
-      this._internals.add(int);
-    }
-
-    for (const ext of externals ?? []) {
-      this._externals.add(ext);
-    }
-
-    // Return itself for nice chaining
-    return this;
-  }
-
-  public updateExternals(
-    fn: (
-      ext: SetType<typeof this._externals>
-    ) => SetType<typeof this._externals>
-  ) {
-    const externals = Array.from(this._externals.values());
-    this._externals.clear();
-
-    for (const ext of externals) {
-      this._externals.add(fn(ext));
-    }
-  }
-
-  public toString() {
-    return `
-  Chunk: ${this.id}
-  Internals: ${
-    this._internals.size > 0
-      ? Array.from(this._internals).map((i) => i.id)
-      : "none"
-  }
-  Externals: ${this._externals.size > 0 ? Array.from(this._externals) : "none"}
-`.trim();
-  }
-}
+import { Module, ModuleGraph, ModuleId } from '../module-graph';
+import crypto from 'node:crypto';
 
 export class ChunkGraph {
   private moduleGraph: ModuleGraph;
@@ -104,7 +13,7 @@ export class ChunkGraph {
   public output() {
     console.log(`${this.chunks.size} chunks in total`);
     for (const chunk of this.chunks.values()) {
-      console.log("\n");
+      console.log('\n');
       console.log(chunk.toString());
     }
   }
@@ -159,7 +68,7 @@ export class ChunkGraph {
 
     for (const { module: dependency, isExternal } of dependencies) {
       // Register packages as external
-      if (typeof dependency === "string") {
+      if (typeof dependency === 'string') {
         externals.push(dependency);
         continue;
       }
@@ -202,7 +111,7 @@ export class ChunkGraph {
     // Return the dependency Ids so they can be queued
     return dependencies.flatMap(({ module }) =>
       // External modules, with only a string identifier, do not need to be queued
-      typeof module === "string" ? [] : module.id
+      typeof module === 'string' ? [] : module.id,
     );
   }
 

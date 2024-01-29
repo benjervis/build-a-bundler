@@ -1,6 +1,6 @@
-import { expect, it } from "vitest";
-import { transform } from "@babel/core";
-import { merge } from ".";
+import { expect, it } from 'vitest';
+import { transform } from '@babel/core';
+import { merge } from '.';
 
 const parentCode = `
   import { secondVar } from "./second.js";
@@ -13,9 +13,9 @@ const dependencyCode = `
   export const secondVar = 'second';
 `.trim();
 
-it("should merge two simple files", () => {
+it('should merge two simple files', () => {
   const result = transform(parentCode, {
-    plugins: [merge, { path: "./second.js", code: dependencyCode }],
+    plugins: [merge, { path: './second.js', code: dependencyCode }],
   });
 
   expect(result).toBeTruthy();

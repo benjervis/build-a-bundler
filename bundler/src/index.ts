@@ -1,7 +1,7 @@
-import * as path from "node:path";
+import * as path from 'node:path';
 
-import { ModuleGraph } from "./module-graph";
-import { ChunkGraph } from "./chunk-graph";
+import { ModuleGraph } from './module-graph';
+import { ChunkGraph } from './chunk-graph';
 
 const getModuleGraph = async (entryIds: string[]) => {
   const moduleGraph = new ModuleGraph();
@@ -14,7 +14,7 @@ const getModuleGraph = async (entryIds: string[]) => {
 };
 
 export const bundle = async () => {
-  const entryPaths = ["src/index.js", "src/second-entry.js"];
+  const entryPaths = ['src/index.js', 'src/second-entry.js'];
 
   const cwd = process.cwd();
 

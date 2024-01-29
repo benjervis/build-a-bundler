@@ -1,6 +1,6 @@
-import fs from "fs/promises";
-import parseImports from "parse-imports";
-import path from "node:path";
+import fs from 'fs/promises';
+import parseImports from 'parse-imports';
+import path from 'node:path';
 
 export type ModuleId = string;
 
@@ -80,18 +80,18 @@ export class ModuleGraph {
   async parseModuleIntoImports(
     id: string,
     source: string | null,
-    isEntry: boolean
+    isEntry: boolean,
   ) {
     const dependencies: Dependency[] = [];
     const imports: ImportItem[] = [];
 
-    const relativeId = path.relative("", id);
+    const relativeId = path.relative('', id);
 
     if (isEntry) {
       this._entryPoints.add(relativeId);
     }
 
-    const rawCode = await fs.readFile(relativeId, "utf-8");
+    const rawCode = await fs.readFile(relativeId, 'utf-8');
     const moduleImports = await parseImports(rawCode, { resolveFrom: id });
 
     for (const dep of moduleImports) {
@@ -99,15 +99,15 @@ export class ModuleGraph {
 
       if (!resolvedDepId) {
         throw new Error(
-          `Failed to resolve module ${dep.moduleSpecifier.value}`
+          `Failed to resolve module ${dep.moduleSpecifier.value}`,
         );
       }
 
-      const depId = path.relative("", resolvedDepId);
+      const depId = path.relative('', resolvedDepId);
 
-      if (resolvedDepId === "node:path") {
-        console.log("dep: ", dep);
-        console.log("depId: ", depId);
+      if (resolvedDepId === 'node:path') {
+        console.log('dep: ', dep);
+        console.log('depId: ', depId);
       }
 
       if (dep.isDynamicImport) {
@@ -115,7 +115,7 @@ export class ModuleGraph {
       }
 
       const isExternal =
-        dep.isDynamicImport || dep.moduleSpecifier.type === "package";
+        dep.isDynamicImport || dep.moduleSpecifier.type === 'package';
 
       dependencies.push({ id: depId, isExternal });
 
@@ -153,7 +153,7 @@ export class ModuleGraph {
       const newImports = await this.parseModuleIntoImports(
         id,
         source,
-        entryId === id
+        entryId === id,
       );
 
       imports.push(...newImports);

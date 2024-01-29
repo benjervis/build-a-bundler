@@ -1,3 +1,3 @@
-import { a } from "./utils";
+import { a } from './utils';
 
-export const myFn = () => "This is the second entrypoint";
+export const myFn = () => 'This is the second entrypoint';
