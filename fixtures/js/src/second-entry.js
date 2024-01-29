@@ -1,3 +1,3 @@
-import { a } from './utils';
+import { concat } from './utils.js';
 
-export const myFn = () => 'This is the second entrypoint';
+export const myFn = () => concat('This is the second entrypoint', 'SUFFIX');

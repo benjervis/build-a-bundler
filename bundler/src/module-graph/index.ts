@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
-import parseImports from 'parse-imports';
 import path from 'node:path';
+
+import parseImports from 'parse-imports';
 
 export type ModuleId = string;
 

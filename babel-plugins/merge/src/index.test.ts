@@ -1,5 +1,6 @@
-import { expect, it } from 'vitest';
 import { transform } from '@babel/core';
+import { expect, it } from 'vitest';
+
 import { merge } from '.';
 
 const parentCode = `

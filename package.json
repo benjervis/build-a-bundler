@@ -8,7 +8,9 @@
     "start": "pnpm --filter=\"core\" start",
     "build-bundler": "pnpm --filter=\"core\" build",
     "build-fixture": "turbo --filter=\"fixtures\" build",
-    "test": "turbo test"
+    "test": "turbo test",
+    "format": "prettier --write . && eslint --fix .",
+    "lint": "prettier --list-different . &&  eslint ."
   },
   "keywords": [],
   "author": "",

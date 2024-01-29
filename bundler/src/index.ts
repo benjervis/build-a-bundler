@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 
-import { ModuleGraph } from './module-graph';
 import { ChunkGraph } from './chunk-graph';
+import { ModuleGraph } from './module-graph';
 
 const getModuleGraph = async (entryIds: string[]) => {
   const moduleGraph = new ModuleGraph();

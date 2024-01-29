@@ -4,10 +4,8 @@ interface PluginState {
   opts: { path: string; code: string };
 }
 
-export const merge = (input: typeof Babel): Babel.PluginObj<PluginState> => {
-  return {
-    visitor: {
-      ExportDeclaration(path, state) {},
-    },
-  };
-};
+export const merge = (input: typeof Babel): Babel.PluginObj<PluginState> => ({
+  visitor: {
+    ExportDeclaration(path, state) {},
+  },
+});

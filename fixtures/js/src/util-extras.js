@@ -1,4 +1,5 @@
-import { NAME } from './constants.js';
 import path from 'node:path';
 
-export const extraFn = () => NAME;
+import { NAME } from './constants.js';
+
+export const extraFn = () => path.sep + NAME;

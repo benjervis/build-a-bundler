@@ -1,5 +1,6 @@
-import { Module } from '../module-graph';
 import crypto from 'node:crypto';
+
+import type { Module } from '../module-graph';
 
 export type ChunkId = string;
 

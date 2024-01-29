@@ -1,9 +1,10 @@
-import { Module, ModuleGraph, ModuleId } from '../module-graph';
-import crypto from 'node:crypto';
+import type { Module, ModuleGraph, ModuleId } from '../module-graph';
+
+import { type ChunkId, Chunk } from './chunk';
 
 export class ChunkGraph {
   private moduleGraph: ModuleGraph;
-  private chunks: Map<ChunkId, Chunk> = new Map();
+  private chunks = new Map<ChunkId, Chunk>();
   private moduleIdToChunk = new Map<ModuleId, ChunkId>();
 
   constructor(moduleGraph: ModuleGraph) {
