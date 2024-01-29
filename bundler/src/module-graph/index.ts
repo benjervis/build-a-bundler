@@ -1,4 +1,4 @@
-import nodeFs from "fs/promises";
+import fs from "fs/promises";
 import parseImports from "parse-imports";
 import path from "node:path";
 
@@ -8,6 +8,10 @@ interface Dependency {
   id: ModuleId;
   isExternal: boolean;
 }
+
+type DependencyModule =
+  | { module: Module; isExternal: boolean }
+  | { module: string; isExternal: true };
 
 export interface Module {
   id: ModuleId;
@@ -23,9 +27,8 @@ type ImportItem = [string, string | null];
 export class ModuleGraph {
   private graph: Map<ModuleId, Module>;
   private readonly _entryPoints: Set<ModuleId>;
-  private fs: typeof nodeFs;
 
-  constructor(fs = nodeFs) {
+  constructor() {
     this.graph = new Map();
     this._entryPoints = new Set();
   }
@@ -34,21 +37,21 @@ export class ModuleGraph {
     return this._entryPoints;
   }
 
-  getDependenciesFor(
-    id: ModuleId
-  ): Array<{ module: Module; isExternal: boolean }> {
+  getDependenciesFor(id: ModuleId): DependencyModule[] {
     const module = this.graph.get(id);
 
     if (!module) {
       throw new Error(`Module ${id} does not exist`);
     }
 
-    const modules: Array<{ module: Module; isExternal: boolean }> = [];
+    const modules: DependencyModule[] = [];
 
     for (const { id: dependencyId, isExternal } of module.dependencies) {
       const dependency = this.getModule(dependencyId);
       if (dependency) {
         modules.push({ module: dependency, isExternal });
+      } else {
+        modules.push({ module: dependencyId, isExternal: true });
       }
     }
 
@@ -88,7 +91,7 @@ export class ModuleGraph {
       this._entryPoints.add(relativeId);
     }
 
-    const rawCode = await this.fs.readFile(relativeId, "utf-8");
+    const rawCode = await fs.readFile(relativeId, "utf-8");
     const moduleImports = await parseImports(rawCode, { resolveFrom: id });
 
     for (const dep of moduleImports) {
@@ -101,6 +104,11 @@ export class ModuleGraph {
       }
 
       const depId = path.relative("", resolvedDepId);
+
+      if (resolvedDepId === "node:path") {
+        console.log("dep: ", dep);
+        console.log("depId: ", depId);
+      }
 
       if (dep.isDynamicImport) {
         this.entryPoints.add(depId);
