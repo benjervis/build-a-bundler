@@ -3,12 +3,13 @@ import type { Module, ModuleGraph, ModuleId } from '../module-graph';
 import { type ChunkId, Chunk } from './chunk';
 
 export class ChunkGraph {
-  private moduleGraph: ModuleGraph;
-  private chunks = new Map<ChunkId, Chunk>();
-  private moduleIdToChunk = new Map<ModuleId, ChunkId>();
+  private _moduleGraph: ModuleGraph;
+  private _moduleIdToChunk = new Map<ModuleId, ChunkId>();
+
+  public chunks = new Map<ChunkId, Chunk>();
 
   constructor(moduleGraph: ModuleGraph) {
-    this.moduleGraph = moduleGraph;
+    this._moduleGraph = moduleGraph;
   }
 
   public output() {
@@ -21,7 +22,7 @@ export class ChunkGraph {
 
   public generateChunks() {
     // Start with the known entrypoints from the module graph
-    const moduleIds = new Set(this.moduleGraph.entryPoints);
+    const moduleIds = new Set(this._moduleGraph.entryPoints);
 
     for (const moduleId of moduleIds) {
       const deps = this.assignModuleToChunk(moduleId);
@@ -32,20 +33,20 @@ export class ChunkGraph {
     }
 
     // Resolve all modules to their chunk Id
-    for (const [moduleId, chunkId] of this.moduleIdToChunk) {
-      this.moduleIdToChunk.set(moduleId, this.ensureChunkId(chunkId));
+    for (const [moduleId, chunkId] of this._moduleIdToChunk) {
+      this._moduleIdToChunk.set(moduleId, this.ensureChunkId(chunkId));
     }
 
     for (const chunk of this.chunks.values()) {
       chunk.updateExternals((ext) => this.ensureChunkId(ext));
     }
 
-    return { chunks: this.chunks, moduleIdToChunk: this.moduleIdToChunk };
+    return { chunks: this.chunks, moduleIdToChunk: this._moduleIdToChunk };
   }
 
   private assignModuleToChunk(moduleId: ModuleId) {
     // For every dependency of the module
-    const dependencies = this.moduleGraph.getDependenciesFor(moduleId);
+    const dependencies = this._moduleGraph.getDependenciesFor(moduleId);
 
     const internals: Module[] = [];
     const externals: string[] = [];
@@ -53,10 +54,10 @@ export class ChunkGraph {
     const chunkId = Chunk.createId(moduleId);
     // If this is a known entrypoint, set up a chunk for it
     if (
-      this.moduleGraph.entryPoints.has(moduleId) &&
+      this._moduleGraph.entryPoints.has(moduleId) &&
       !this.chunks.has(chunkId)
     ) {
-      const module = this.moduleGraph.getModule(moduleId);
+      const module = this._moduleGraph.getModule(moduleId);
       if (!module) {
         throw new Error(`Unable to locate entrypoint ${moduleId}`);
       }
@@ -79,7 +80,7 @@ export class ChunkGraph {
         dependency.isEntry ||
         isExternal ||
         // If this dependency has already been allocated to a chunk, it's external to this one
-        this.moduleIdToChunk.has(dependency.id)
+        this._moduleIdToChunk.has(dependency.id)
       ) {
         externals.push(dependency.id);
         continue;
@@ -117,8 +118,8 @@ export class ChunkGraph {
   }
 
   private registerModuleIdToChunk(moduleId: ModuleId, chunkId: ChunkId) {
-    if (!this.moduleIdToChunk.has(moduleId)) {
-      this.moduleIdToChunk.set(moduleId, chunkId);
+    if (!this._moduleIdToChunk.has(moduleId)) {
+      this._moduleIdToChunk.set(moduleId, chunkId);
     }
   }
 
@@ -127,7 +128,7 @@ export class ChunkGraph {
       return moduleId;
     }
 
-    const chunkId = this.moduleIdToChunk.get(moduleId);
+    const chunkId = this._moduleIdToChunk.get(moduleId);
 
     // This is probably a package specifier
     if (!chunkId) {
